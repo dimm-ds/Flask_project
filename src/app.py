@@ -6,7 +6,7 @@ app = Flask(__name__)
 
 # Определяем маршрут и привязываем его к функции
 @app.route("/hello")
-def about():
+def hello():
     return "Hello, world!"
 
 
@@ -15,29 +15,22 @@ def info():
     return "This is an informational page."
 
 
-@app.route("/calc/<a>/<b>")
+@app.route("/calc/<int:a>/<int:b>")
 def calc(a, b):
-    try:
-        float(a)
-        float(b)
-    except ValueError:
-        return "Неправильный формат ввода"
     return f"The sum of {a} and {b} is {a + b}."
 
 
-@app.route("/reverse/", defaults={'word': ''})
 @app.route("/reverse/<word>")
-def reverse(word):
+def reverse(word=''):
     if not word:
-        return 'Нет слова для переворота'
+        return 'No word to reverse', 400
+    return word[::-1]
 
-    return f'{word}'[::-1]
 
-
-@app.route("/user/<name>/<age>")
+@app.route("/user/<name>/<int:age>")
 def user(name, age):
-    if not age > 0:
-        return 'Некорректный возраст'
+    if age <= 0:
+        return 'Invalid age', 400
     return f"Hello, {name}. You are {age} years old."
 
 
